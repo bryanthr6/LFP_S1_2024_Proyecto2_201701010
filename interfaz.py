@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
+from tkinter import messagebox
 
 #variable raiz representa la ventana principal
 raiz = tk.Tk()
@@ -7,6 +8,112 @@ raiz = tk.Tk()
 
 def hola():
     print('Hola')
+
+def nuevo():
+    if txt_entrada.get(1.0, "end-1c") != "":
+        guardar_cambios = messagebox.askyesnocancel("Guardar cambios", "¿Desea guardar los cambios antes de limpiar el editor?")
+        if guardar_cambios:
+            guardar()
+        elif guardar_cambios is None:  # Si el usuario cancela, no limpiamos el editor
+            return
+    txt_entrada.delete(1.0, "end")
+    archivo_actual.set("")
+
+
+def guardar():
+    archivo = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Archivos de texto", "*.txt")])
+    if archivo:
+        with open(archivo, "w") as f:
+            f.write(txt_entrada.get(1.0, "end-1c"))
+        archivo_actual.set(archivo)
+
+def abrir():
+    archivo = filedialog.askopenfilename(filetypes=[("Archivos de texto", "*.txt")])
+    if archivo:
+        with open(archivo, "r") as f:
+            contenido = f.read()
+            txt_entrada.delete(1.0, "end")
+            txt_entrada.insert(1.0, contenido)
+        archivo_actual.set(archivo)
+
+def guardar_como():
+    archivo = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Archivos de texto", "*.txt")])
+    if archivo:
+        with open(archivo, "w") as f:
+            f.write(txt_entrada.get(1.0, "end-1c"))
+        archivo_actual.set(archivo)
+
+
+
+
+# Agrega un archivo actual para rastrear el archivo abierto
+archivo_actual = tk.StringVar()
+archivo_actual.set("")  # Inicialmente no hay archivo abierto
+
+
+
+
+# Crear un widget Menu
+menu_bar = tk.Menu(raiz)
+
+# Crear el menú Archivo y agregarle opciones
+menu_archivo = tk.Menu(menu_bar, tearoff=0)
+menu_archivo.add_command(label="Nuevo", command=nuevo)
+menu_archivo.add_command(label="Abrir", command=abrir)
+menu_archivo.add_command(label="Guardar", command=guardar)
+menu_archivo.add_command(label="Guardar Como", command=guardar_como)
+menu_archivo.add_separator()
+menu_archivo.add_command(label="Salir", command=raiz.quit)
+
+# Crear el menú Análisis y agregarle opciones
+menu_analisis = tk.Menu(menu_bar, tearoff=0)
+menu_analisis.add_command(label="Ejecutar análisis")
+
+# Crear el menú Tokens y agregarle opciones
+menu_tokens = tk.Menu(menu_bar, tearoff=0)
+menu_tokens.add_command(label="Mostrar tokens")
+
+# Crear el menú Errores y agregarle opciones
+menu_errores = tk.Menu(menu_bar, tearoff=0)
+menu_errores.add_command(label="Mostrar errores")
+
+# Agregar los menús al menú principal
+menu_bar.add_cascade(label="Archivo", menu=menu_archivo)
+menu_bar.add_cascade(label="Análisis", menu=menu_analisis)
+menu_bar.add_cascade(label="Tokens", menu=menu_tokens)
+menu_bar.add_cascade(label="Errores", menu=menu_errores)
+
+# Configurar la ventana para que use el menú
+raiz.config(menu=menu_bar)
+
+
+# Crear un Scrollbar vertical
+scrollbar_entrada_vertical = tk.Scrollbar(raiz)
+scrollbar_entrada_vertical.grid(row=1, column=1, padx=5, pady=5, sticky='ns')
+
+#Fuente personalizada
+fuente_personalizada = ('Comic Sans MS', 10)
+
+#Etiquetas para identificar cuadro de texto "Texto de entrada"
+etiqueta_izquierda = tk.Label(raiz, text="Texto de Entrada:", bg='lightsteelblue4', fg='white', font=fuente_personalizada)
+etiqueta_izquierda.grid(row=0, column=0, padx=5, pady=5, sticky='w')
+etiqueta_izquierda.place(x=20, y=65)
+
+
+#Cuadro de texto para el texto de entrada
+txt_entrada= tk.Text(raiz, width=106,height=27, wrap="none", yscrollcommand=scrollbar_entrada_vertical.set)
+txt_entrada.grid(row=1, column=0, padx=5, pady=5, sticky='ew')
+txt_entrada.place(x=20, y=90)
+
+# Configurar barras de desplazamiento para el cuadro de texto
+scrollbar_entrada_vertical.config(command=txt_entrada.yview)
+
+
+# Cambiar la posición de las barras de desplazamiento
+scrollbar_entrada_vertical.place(x=870, y=90, height=437)
+
+
+
 
 
 
@@ -17,7 +124,7 @@ raiz.title(titulo_ventana)
 #Cambiar la imagen en la esquina superior izquierda de la ventana
 raiz.iconbitmap('FIUSAC.ico')
 
-#Aquí es para definier el tamaño de la ventana y centrarla
+#Aquí es para definir el tamaño de la ventana y centrarla
 #definir tamaño de la ventana
 ancho_ventana= 900
 alto_ventana= 600
