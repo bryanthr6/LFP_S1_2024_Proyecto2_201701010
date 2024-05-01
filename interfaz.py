@@ -21,11 +21,12 @@ def nuevo():
 
 
 def guardar():
-    archivo = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Archivos de texto", "*.txt")])
-    if archivo:
-        with open(archivo, "w") as f:
+    if archivo_actual.get():  # Si hay un archivo actual, guardar sobre él
+        with open(archivo_actual.get(), "w") as f:
             f.write(txt_entrada.get(1.0, "end-1c"))
-        archivo_actual.set(archivo)
+    else:
+        guardar_como()  # Si no hay archivo actual, llamar a la función guardar_como
+
 
 def abrir():
     archivo = filedialog.askopenfilename(filetypes=[("Archivos de texto", "*.txt")])
