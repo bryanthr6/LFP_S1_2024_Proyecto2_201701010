@@ -5,10 +5,11 @@ from tkinter import messagebox
 #variable raiz representa la ventana principal
 raiz = tk.Tk()
 
-
+#función de prueba
 def hola():
     print('Hola')
 
+#Función de Nuevo
 def nuevo():
     if txt_entrada.get(1.0, "end-1c") != "":
         guardar_cambios = messagebox.askyesnocancel("Guardar cambios", "¿Desea guardar los cambios antes de limpiar el editor?")
@@ -19,7 +20,7 @@ def nuevo():
     txt_entrada.delete(1.0, "end")
     archivo_actual.set("")
 
-
+#Función de Guardar
 def guardar():
     if archivo_actual.get():  # Si hay un archivo actual, guardar sobre él
         with open(archivo_actual.get(), "w") as f:
@@ -27,7 +28,7 @@ def guardar():
     else:
         guardar_como()  # Si no hay archivo actual, llamar a la función guardar_como
 
-
+#Función de Abrir
 def abrir():
     archivo = filedialog.askopenfilename(filetypes=[("Archivos de texto", "*.txt")])
     if archivo:
@@ -37,6 +38,7 @@ def abrir():
             txt_entrada.insert(1.0, contenido)
         archivo_actual.set(archivo)
 
+#Función de Guardar Como
 def guardar_como():
     archivo = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Archivos de texto", "*.txt")])
     if archivo:
