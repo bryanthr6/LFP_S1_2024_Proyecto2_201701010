@@ -10,6 +10,7 @@ def handle_token(token):
     tokens.append(token)
     print(f"Token: {token.value}, Línea: {token.line}, Columna: {token.col}")
 
+
 # Función para manejar caracteres desconocidos como errores y guardar los mensajes de error
 def handle_unknown_character(char):
     global line, col, error_messages
@@ -19,7 +20,7 @@ def handle_unknown_character(char):
 
 # Función para tokenizar la entrada
 def tokenize_input(input_str):
-    global line, col, tokens
+    global line, col
 
     line = 1
     col = 1
@@ -38,7 +39,6 @@ def tokenize_input(input_str):
         elif char in ["{", "}", "[", "]", ",", ";"]:
             col += 1
             token = Token(char, line, col)
-            tokens.append(token)
             handle_token(token)
             i += 1
         elif char == "=":
@@ -46,12 +46,10 @@ def tokenize_input(input_str):
             # Manejar operador de asignación o comparación
             if i + 1 < len(input_str) and input_str[i + 1] == "=":
                 token = Token("==", line, col)
-                tokens.append(token)
                 handle_token(token)
                 i += 2
             else:
                 token = Token(char, line, col)
-                tokens.append(token)
                 handle_token(token)
                 i += 1
         elif char == "/":
@@ -79,27 +77,23 @@ def tokenize_input(input_str):
                     i += 1
             else:
                 token = Token(char, line, col)
-                tokens.append(token)
                 handle_token(token)
                 i += 1
         elif char == '"':
             # Tokenizar cadenas entre comillas
             token, pos = tokenize_string(input_str[i:], line, col)
-            tokens.append(token)
             handle_token(token)
             col += pos
             i += pos
         elif char.isdigit():
             # Tokenizar números
             token, pos = tokenize_number(input_str[i:], line, col)
-            tokens.append(token)
             handle_token(token)
             col += pos
             i += pos
         elif char.isalpha():
             # Tokenizar palabras clave e identificadores
             token, pos = tokenize_keyword(input_str[i:], line, col)
-            tokens.append(token)
             handle_token(token)
             col += pos
             i += pos

@@ -48,6 +48,61 @@ def guardar_como():
             f.write(txt_entrada.get(1.0, "end-1c"))
         archivo_actual.set(archivo)
         
+
+def generar_reporte_tokens():
+    # Generar el contenido HTML del reporte de tokens
+    contenido_tokens_html = "<html>\n<head>\n<title>Reporte de Tokens</title>\n</head>\n<body>\n"
+    
+    # Agregar la sección de tokens al contenido HTML
+    contenido_tokens_html += "<h1>Reporte de Tokens</h1>\n"
+    if tokens:
+        contenido_tokens_html += "<table border='1'>\n<tr><th>Token</th><th>Lexema</th><th>Línea</th><th>Columna</th></tr>\n"
+        for token in tokens:
+            contenido_tokens_html += f"<tr><td>{token.value}</td><td>{token.value}</td><td>{token.line}</td><td>{token.col}</td></tr>\n"
+        contenido_tokens_html += "</table>\n"
+    else:
+        contenido_tokens_html += "<p>No se encontraron tokens.</p>\n"
+    
+    # Cerrar el contenido HTML
+    contenido_tokens_html += "</body>\n</html>"
+    
+    # Escribir el contenido HTML en un archivo para el reporte de tokens
+    with open("ReporteTokens.html", "w") as archivo_tokens:
+        archivo_tokens.write(contenido_tokens_html)
+    
+    # Notificar al usuario que se ha generado el reporte de tokens
+    print("Se ha generado el reporte de tokens en el archivo 'ReporteTokens.html'")
+
+
+def generar_reporte_errores():
+    # Generar el contenido HTML del reporte de errores
+    contenido_errores_html = "<html>\n<head>\n<title>Reporte de Errores</title>\n</head>\n<body>\n"
+    
+    # Agregar la sección de errores al contenido HTML
+    contenido_errores_html += "<h1>Reporte de Errores</h1>\n"
+    if error_messages:
+        contenido_errores_html += "<table border='1'>\n<tr><th>Carácter</th><th>Línea</th><th>Columna</th></tr>\n"
+        for error in error_messages:
+            parts = error.split()
+            char = parts[-6]
+            line = parts[-3]
+            column = parts[-1]
+            contenido_errores_html += f"<tr><td>{char}</td><td>{line}</td><td>{column}</td></tr>\n"
+        contenido_errores_html += "</table>\n"
+    else:
+        contenido_errores_html += "<p>No se encontraron errores.</p>\n"
+    
+    # Cerrar el contenido HTML
+    contenido_errores_html += "</body>\n</html>"
+    
+    # Escribir el contenido HTML en un archivo para el reporte de errores
+    with open("ReporteErrores.html", "w") as archivo_errores:
+        archivo_errores.write(contenido_errores_html)
+    
+    # Notificar al usuario que se ha generado el reporte de errores
+    print("Se ha generado el reporte de errores en el archivo 'ReporteErrores.html'")
+
+# Modificar la función ejecutar_analisis para que llame a las funciones adecuadas
 def ejecutar_analisis():
     # Obtener el texto del cuadro de texto
     contenido = txt_entrada.get("1.0", "end-1c")
@@ -55,42 +110,9 @@ def ejecutar_analisis():
     # Tokenizar el contenido
     tokenize_input(contenido)
     
-    # Generar el contenido HTML del reporte de errores y tokens
-    contenido_html = "<html>\n<head>\n<title>Reporte de Errores e Instrucciones</title>\n</head>\n<body>\n"
-    
-    # Agregar la sección de errores al contenido HTML
-    contenido_html += "<h1>Reporte de Errores</h1>\n"
-    if error_messages:
-        contenido_html += "<table border='1'>\n<tr><th>Carácter</th><th>Línea</th><th>Columna</th></tr>\n"
-        for error in error_messages:
-            parts = error.split()
-            char = parts[-6]
-            line = parts[-3]
-            column = parts[-1]
-            contenido_html += f"<tr><td>{char}</td><td>{line}</td><td>{column}</td></tr>\n"
-        contenido_html += "</table>\n"
-    else:
-        contenido_html += "<p>No se encontraron errores.</p>\n"
-    
-    # Agregar la sección de tokens al contenido HTML
-    contenido_html += "<h1>Reporte de Tokens</h1>\n"
-    if tokens:
-        contenido_html += "<table border='1'>\n<tr><th>Valor</th><th>Línea</th><th>Columna</th></tr>\n"
-        for token in tokens:
-            contenido_html += f"<tr><td>{token.value}</td><td>{token.line}</td><td>{token.col}</td></tr>\n"
-        contenido_html += "</table>\n"
-    else:
-        contenido_html += "<p>No se encontraron tokens.</p>\n"
-    
-    # Cerrar el contenido HTML
-    contenido_html += "</body>\n</html>"
-    
-    # Escribir el contenido HTML en un archivo
-    with open("Reporte.html", "w") as archivo:
-        archivo.write(contenido_html)
-    
-    # Notificar al usuario que se ha generado el reporte
-    print("Se ha generado el reporte de errores y tokens en el archivo 'Reporte.html'")
+    # Generar los reportes de tokens y errores
+    generar_reporte_tokens()
+    generar_reporte_errores()
 
 
 # Agrega un archivo actual para rastrear el archivo abierto
