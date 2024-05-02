@@ -74,6 +74,7 @@ def generar_reporte_tokens():
     print("Se ha generado el reporte de tokens en el archivo 'ReporteTokens.html'")
 
 
+# Función para generar el reporte de errores en HTML
 def generar_reporte_errores():
     # Generar el contenido HTML del reporte de errores
     contenido_errores_html = "<html>\n<head>\n<title>Reporte de Errores</title>\n</head>\n<body>\n"
@@ -81,13 +82,13 @@ def generar_reporte_errores():
     # Agregar la sección de errores al contenido HTML
     contenido_errores_html += "<h1>Reporte de Errores</h1>\n"
     if error_messages:
-        contenido_errores_html += "<table border='1'>\n<tr><th>Carácter</th><th>Línea</th><th>Columna</th></tr>\n"
-        for error in error_messages:
+        contenido_errores_html += "<table border='1'>\n<tr><th>Carácter</th><th>Línea</th><th>Columna</th><th>Tipo de Error</th></tr>\n"
+        for error, error_type in error_messages:
             parts = error.split()
             char = parts[-6]
             line = parts[-3]
             column = parts[-1]
-            contenido_errores_html += f"<tr><td>{char}</td><td>{line}</td><td>{column}</td></tr>\n"
+            contenido_errores_html += f"<tr><td>{char}</td><td>{line}</td><td>{column}</td><td>{error_type}</td></tr>\n"
         contenido_errores_html += "</table>\n"
     else:
         contenido_errores_html += "<p>No se encontraron errores.</p>\n"
@@ -101,6 +102,7 @@ def generar_reporte_errores():
     
     # Notificar al usuario que se ha generado el reporte de errores
     print("Se ha generado el reporte de errores en el archivo 'ReporteErrores.html'")
+
 
 # Modificar la función ejecutar_analisis para que llame a las funciones adecuadas
 def ejecutar_analisis():

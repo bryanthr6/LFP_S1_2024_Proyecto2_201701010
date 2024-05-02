@@ -15,8 +15,9 @@ def handle_token(token):
 def handle_unknown_character(char):
     global line, col, error_messages
     error_message = f"Error: Carácter desconocido '{char}' en línea: {line}, columna: {col}"
+    error_type = "Error léxico"
+    error_messages.append((error_message, error_type))
     print(error_message)
-    error_messages.append(error_message)
 
 # Función para tokenizar la entrada
 def tokenize_input(input_str):
@@ -148,6 +149,59 @@ def tokenize_keyword(input_str, line, col):
         i += 1
         col += 1
     return Token(token, line, col - len(token)), i
+
+
+def clasificar_token(token):
+    if hasattr(token, 'value'):
+        if isinstance(token.value, str):
+            if token.value.startswith('"') and token.value.endswith('"'):
+                inner_value = token.value[1:-1]  # Eliminar las comillas del principio y del final
+                if inner_value.isdigit():
+                    return "Número"
+                else:
+                    return "Cadena"
+    elif token.value in ["CrearBD"]:
+        return "Crear una base de datos"
+    elif token.value in ["TipoFuncion"]:
+        return "Descripcion"
+    elif token.value in ["EliminarBD"]:
+        return "Eliminar base de datos"
+    elif token.value in ["CrearColeccion"]:
+        return "Crear una coleccion"
+    elif token.value in ["EliminarColeccion"]:
+        return "Elimina una coleccion"
+    elif token.value in ["InsertarUnico"]:
+        return "Inserta registro simple"
+    elif token.value in ["ActualizarUnico"]:
+        return "Actualiza registro simple"
+    elif token.value in ["Eliminar Unico"]:
+        return "Elimina Registro Simple"
+    elif token.value in ["BuscarTodo"]:
+        return "Busca todos los registros"
+    elif token.value in ["BuscarUnico"]:
+        return "Busca solamente un registro"
+    elif token.value in ["="]:
+        return "Asignación"
+    elif token.value in ["{"]:
+        return "Llave abrir"
+    elif token.value in ["}"]:
+        return "Llave cerrar"
+    elif token.value in ["["]:
+        return "Abrir bloque"
+    elif token.value in ["]"]:
+        return "Cerrar bloque"
+    elif token.value in [":"]:
+        return "Dos puntos"
+    elif token.value in [";"]:
+        return "Cierre de instrucción"
+    elif token.value in [","]:
+        return "Cierre de bloque"
+    else:
+        return "Desconocido"
+
+
+
+
 
 # Texto a analizar
 texto = """
