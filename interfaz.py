@@ -139,11 +139,14 @@ menu_analisis.add_command(label="Ejecutar análisis", command=ejecutar_analisis)
 
 # Crear el menú Tokens y agregarle opciones
 menu_tokens = tk.Menu(menu_bar, tearoff=0)
-menu_tokens.add_command(label="Mostrar tokens")
+menu_tokens.add_command(label="Mostrar tokens", command=lambda: messagebox.showinfo("Reporte de Tokens", "Se generó la lista de tokens en el archivo 'ReporteTokens.html'."))
+
+
 
 # Crear el menú Errores y agregarle opciones
 menu_errores = tk.Menu(menu_bar, tearoff=0)
-menu_errores.add_command(label="Mostrar errores")
+menu_errores.add_command(label="Mostrar errores", command=lambda: messagebox.showinfo("Reporte de Errores", "Se generó la lista de errores en el archivo 'ReporteErrores.html'."))
+
 
 # Agregar los menús al menú principal
 menu_bar.add_cascade(label="Archivo", menu=menu_archivo)
