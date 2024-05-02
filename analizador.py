@@ -37,7 +37,7 @@ def tokenize_input(input_str):
             elif char == "\t":
                 col += 4
             i += 1
-        elif char in ["{", "}", "[", "]", ",", ";"]:
+        elif char in ["{", "}", "[", "]", ",", ";", "(", ")"]:  # Añadir '(' y ')' aquí
             col += 1
             token = Token(char, line, col)
             handle_token(token)
@@ -102,6 +102,7 @@ def tokenize_input(input_str):
             handle_unknown_character(char)
             col += 1
             i += 1
+
 
 # Función para tokenizar cadenas entre comillas
 def tokenize_string(input_str, line, col):
