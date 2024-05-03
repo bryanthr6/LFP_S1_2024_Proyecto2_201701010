@@ -1,0 +1,8 @@
+// CrearBD
+use('DBEjemplo');
+
+// EliminarBD
+db.dropDatabase('DBEjemplo');
+
+// CrearBD
+use('Futbol');
