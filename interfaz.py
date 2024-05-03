@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
+import webbrowser
 import subprocess
 from analizador import tokenize_input, tokens, error_messages
 
@@ -121,6 +122,14 @@ def ejecutar_analisis():
 archivo_actual = tk.StringVar()
 archivo_actual.set("")  # Inicialmente no hay archivo abierto
 
+# Función para mostrar el reporte de tokens en el navegador
+def mostrar_tokens():
+    webbrowser.open_new_tab("ReporteTokens.html")
+
+# Función para mostrar el reporte de errores en el navegador
+def mostrar_errores():
+    webbrowser.open_new_tab("ReporteErrores.html")
+
 # Crear un widget Menu
 menu_bar = tk.Menu(raiz)
 
@@ -139,14 +148,13 @@ menu_analisis.add_command(label="Ejecutar análisis", command=ejecutar_analisis)
 
 # Crear el menú Tokens y agregarle opciones
 menu_tokens = tk.Menu(menu_bar, tearoff=0)
-menu_tokens.add_command(label="Mostrar tokens", command=lambda: messagebox.showinfo("Reporte de Tokens", "Se generó la lista de tokens en el archivo 'ReporteTokens.html'."))
+menu_tokens.add_command(label="Mostrar tokens", command=mostrar_tokens)
 
 
 
 # Crear el menú Errores y agregarle opciones
 menu_errores = tk.Menu(menu_bar, tearoff=0)
-menu_errores.add_command(label="Mostrar errores", command=lambda: messagebox.showinfo("Reporte de Errores", "Se generó la lista de errores en el archivo 'ReporteErrores.html'."))
-
+menu_errores.add_command(label="Mostrar errores", command=mostrar_errores)
 
 # Agregar los menús al menú principal
 menu_bar.add_cascade(label="Archivo", menu=menu_archivo)
