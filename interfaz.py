@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
 import webbrowser
-import subprocess
+import sintaxis
 from analizador import tokenize_input, tokens, error_messages
 
 # Variable raíz representa la ventana principal

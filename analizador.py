@@ -1,5 +1,5 @@
 from collections import namedtuple
-import re
+import sintaxis
 
 # Definir la tupla Token
 Token = namedtuple("Token", ["value", "line", "col"])
