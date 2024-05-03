@@ -30,24 +30,72 @@ class SelectStatement(Statement):
 class EmptyStatement(Statement):
     pass
 
-# Define las funciones para analizar la secuencia de tokens
-def parse_create_statement(tokens):
-    # Implementa la lógica para analizar una instrucción 'CrearBD' o 'CrearColeccion'
-    pass
-
 def parse_delete_statement(tokens):
-    # Implementa la lógica para analizar una instrucción 'EliminarBD' o 'EliminarColeccion'
-    pass
+    # Comprueba si la instrucción comienza con 'EliminarBD' o 'EliminarColeccion'
+    if len(tokens) < 3:
+        return None  # La instrucción es demasiado corta para ser válida
+    
+    if tokens[0].value == 'EliminarBD':
+        if tokens[1].value != 'DBEjemplo':  # Comprueba el identificador
+            return None  # El identificador no es válido
+        if tokens[2].value != ';':  # Comprueba el punto y coma al final
+            return None  # La instrucción no termina correctamente
+        return DeleteStatement(tokens[1].value)
+    
+    if tokens[0].value == 'EliminarColeccion':
+        # Comprueba si hay suficientes tokens para verificar la estructura de la instrucción
+        if len(tokens) < 4:
+            return None  # La instrucción es demasiado corta para ser válida
+        
+        # Verifica el identificador de la colección
+        collection_identifier = tokens[1].value
+        if not (collection_identifier.startswith('"') and collection_identifier.endswith('"')):
+            return None  # El identificador de la colección debe estar entre comillas
+        
+        # Verifica el punto y coma al final
+        if tokens[2].value != ';':
+            return None  # La instrucción no termina correctamente
+        
+        return DeleteStatement(collection_identifier[1:-1])  # Retorna una instancia de DeleteStatement si es válido
+    
+    return None 
+
 
 def parse_insert_statement(tokens):
-    # Implementa la lógica para analizar una instrucción 'InsertarUnico'
-    pass
+    # Comprueba si la instrucción comienza con 'InsertarUnico'
+    if len(tokens) < 8:
+        return None  # La instrucción es demasiado corta para ser válida
+    
+    if tokens[0].value == 'InsertarUnico':
+        if tokens[1].value != 'insertarFutbolista':  # Comprueba el identificador
+            return None  # El identificador no es válido
+        if tokens[2].value != '=' or tokens[3].value != 'new' or tokens[4].value != 'InsertarUnico' or tokens[5].value != '(':
+            return None  # La estructura de la instrucción no es válida
+        
+        # Verifica el contenido entre paréntesis
+        key_value_pairs = {}
+        i = 6
+        while i < len(tokens):
+            if tokens[i].value == ')':
+                break  # Sal del bucle si llegamos al final del contenido
+            if tokens[i].value != ',':
+                # Esperamos que el siguiente token sea una cadena, luego dos puntos y otra cadena
+                if i + 2 < len(tokens) and tokens[i].value.startswith('"') and tokens[i + 1].value == ':' and tokens[i + 2].value.startswith('"'):
+                    key = tokens[i].value[1:-1]  # Quita las comillas del principio y del final
+                    value = tokens[i + 2].value[1:-1]  # Quita las comillas del principio y del final
+                    key_value_pairs[key] = value
+                    i += 3  # Saltamos al siguiente token después del valor
+                else:
+                    return None  # La estructura del par clave-valor es incorrecta
+            else:
+                i += 1  # Saltamos al siguiente token si encontramos una coma
+        
+        # Verifica si se cierra correctamente con un punto y coma
+        if i + 1 < len(tokens) and tokens[i + 1].value == ';':
+            return InsertStatement(tokens[1].value, key_value_pairs)  # Retorna una instancia de InsertStatement si es válido
+        
+    return None
 
-# Define las demás funciones de análisis de instrucciones
-
-def parse_statement(tokens):
-    # Implementa la lógica para analizar una instrucción completa
-    pass
 
 
 # Definir una variable global para el índice actual del token
