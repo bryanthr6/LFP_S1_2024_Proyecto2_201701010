@@ -50,9 +50,6 @@ def parse_statement(tokens):
     pass
 
 
-
-
-
 # Definir una variable global para el índice actual del token
 current_token_index = 0
 
