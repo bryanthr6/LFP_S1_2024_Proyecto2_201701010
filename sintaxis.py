@@ -162,3 +162,24 @@ def parse():
 
 # Llamar a la función parse para iniciar el análisis sintáctico
 parse()
+
+
+def translate_delete_statement(statement):
+    # Aquí se traduce la instrucción DeleteStatement a un comando MongoDB para eliminar la colección
+    return {"drop": statement.collection_name}
+
+# Define las demás funciones de traducción para cada tipo de instrucción
+
+def translate_statement(statement):
+    if isinstance(statement, DeleteStatement):
+        return translate_delete_statement(statement)
+    
+    # Agrega traducciones para otros tipos de instrucciones aquí
+
+# Ejemplo de uso:
+statement = parse_delete_statement(tokens)
+if statement:
+    mongo_command = translate_statement(statement)
+    print("Comando MongoDB:", mongo_command)
+else:
+    print("Instrucción no válida.")
