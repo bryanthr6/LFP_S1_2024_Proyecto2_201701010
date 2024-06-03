@@ -27,9 +27,6 @@ class SelectStatement(Statement):
     def __init__(self, identifier):
         self.identifier = identifier
 
-class EmptyStatement(Statement):
-    pass
-
 def parse_delete_statement(tokens):
     # Comprueba si la instrucción comienza con 'EliminarBD' o 'EliminarColeccion'
     if len(tokens) < 3:
